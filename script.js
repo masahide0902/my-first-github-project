@@ -1,5 +1,6 @@
 // DOM要素の取得
 const clickBtn = document.getElementById('clickBtn');
+const resetBtn = document.getElementById('resetBtn');
 const statusDisplay = document.getElementById('status-display');
 
 // クリック回数をカウント
@@ -37,7 +38,34 @@ function getRandomMessage() {
 // ボタンクリック時の処理
 function handleButtonClick() {
     clickCount++;
+    updateDisplay();
+}
+
+// リセットボタンクリック時の処理
+function handleResetClick() {
+    clickCount = 0;
+    clickBtn.textContent = 'クリックしてみよう！';
     
+    // リセットアニメーション
+    resetBtn.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        resetBtn.style.transform = 'scale(1)';
+    }, 150);
+    
+    // ステータス表示をリセット
+    statusDisplay.style.background = 'linear-gradient(45deg, #f093fb 0%, #f5576c 100%)';
+    statusDisplay.innerHTML = `
+        <h4>🔄 カウンターがリセットされました！</h4>
+        <p><strong>リセット時刻:</strong> ${getCurrentDateTime()}</p>
+        <p><strong>メッセージ:</strong> 新しいスタートです！再度ボタンをクリックしてみましょう。</p>
+        <div style="margin-top: 1rem;">
+            <small>🆕 新機能: リセットボタンが追加されました！</small>
+        </div>
+    `;
+}
+
+// 表示を更新する関数
+function updateDisplay() {
     // ボタンのテキストを更新
     clickBtn.textContent = `クリック回数: ${clickCount}`;
     
@@ -88,6 +116,7 @@ function initializePage() {
 // イベントリスナーの設定
 document.addEventListener('DOMContentLoaded', initializePage);
 clickBtn.addEventListener('click', handleButtonClick);
+resetBtn.addEventListener('click', handleResetClick);
 
 // キーボードショートカット（Enterキーでボタンクリック）
 document.addEventListener('keydown', function(event) {

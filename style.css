@@ -61,6 +61,13 @@ main {
 }
 
 /* ボタン */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .btn {
     background: linear-gradient(45deg, #ff6b6b, #ee5a24);
     color: white;
@@ -71,6 +78,10 @@ main {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, #74b9ff, #0984e3);
 }
 
 .btn:hover {
