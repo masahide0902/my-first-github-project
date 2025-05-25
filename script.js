@@ -2,9 +2,18 @@
 const clickBtn = document.getElementById('clickBtn');
 const resetBtn = document.getElementById('resetBtn');
 const statusDisplay = document.getElementById('status-display');
+const darkModeBtn = document.getElementById('darkModeBtn');
+const historyDisplay = document.getElementById('history-display');
+const clearHistoryBtn = document.getElementById('clearHistoryBtn');
 
 // クリック回数をカウント
 let clickCount = 0;
+
+// クリック履歴を保存
+let clickHistory = [];
+
+// ダークモードの状態
+let isDarkMode = false;
 
 // 現在の日時を取得する関数
 function getCurrentDateTime() {
@@ -38,7 +47,17 @@ function getRandomMessage() {
 // ボタンクリック時の処理
 function handleButtonClick() {
     clickCount++;
+    
+    // 履歴に追加
+    const clickTime = getCurrentDateTime();
+    clickHistory.push({
+        count: clickCount,
+        time: clickTime,
+        message: getRandomMessage()
+    });
+    
     updateDisplay();
+    updateHistoryDisplay();
 }
 
 // リセットボタンクリック時の処理
@@ -62,6 +81,36 @@ function handleResetClick() {
             <small>🆕 新機能: リセットボタンが追加されました！</small>
         </div>
     `;
+}
+
+// 履歴クリアボタンクリック時の処理
+function handleClearHistoryClick() {
+    clickHistory = [];
+    updateHistoryDisplay();
+    
+    // アニメーション
+    clearHistoryBtn.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        clearHistoryBtn.style.transform = 'scale(1)';
+    }, 150);
+}
+
+// ダークモードボタンクリック時の処理
+function handleDarkModeClick() {
+    isDarkMode = !isDarkMode;
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    
+    // ボタンテキストを更新
+    darkModeBtn.textContent = isDarkMode ? '☀️ ライトモード' : '🌙 ダークモード';
+    
+    // アニメーション
+    darkModeBtn.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        darkModeBtn.style.transform = 'scale(1)';
+    }, 150);
+    
+    // ローカルストレージに保存
+    localStorage.setItem('darkMode', isDarkMode);
 }
 
 // 表示を更新する関数
@@ -104,6 +153,14 @@ function initializePage() {
     console.log('🚀 GitHub学習プロジェクトが開始されました！');
     console.log('📅 開始時刻:', getCurrentDateTime());
     
+    // ダークモードの設定を復元
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (savedDarkMode) {
+        isDarkMode = true;
+        document.body.classList.add('dark-mode');
+        darkModeBtn.textContent = '☀️ ライトモード';
+    }
+    
     // 初期メッセージを設定
     statusDisplay.innerHTML = `
         <h4>👋 GitHub学習プロジェクトへようこそ！</h4>
@@ -113,10 +170,41 @@ function initializePage() {
     `;
 }
 
+// 履歴表示を更新する関数
+function updateHistoryDisplay() {
+    if (clickHistory.length === 0) {
+        historyDisplay.innerHTML = '<p>まだクリック履歴がありません。ボタンをクリックして履歴を作成しましょう！</p>';
+        clearHistoryBtn.style.display = 'none';
+        return;
+    }
+    
+    // 最新10件の履歴を表示
+    const recentHistory = clickHistory.slice(-10).reverse();
+    
+    let historyHTML = '<h4>📊 最新のクリック履歴</h4>';
+    recentHistory.forEach((item, index) => {
+        historyHTML += `
+            <div class="history-item">
+                <strong>#${item.count}</strong> - ${item.time}
+                <br><small>${item.message}</small>
+            </div>
+        `;
+    });
+    
+    if (clickHistory.length > 10) {
+        historyHTML += `<p style="margin-top: 1rem; opacity: 0.8;"><small>他に${clickHistory.length - 10}件の履歴があります</small></p>`;
+    }
+    
+    historyDisplay.innerHTML = historyHTML;
+    clearHistoryBtn.style.display = 'inline-block';
+}
+
 // イベントリスナーの設定
 document.addEventListener('DOMContentLoaded', initializePage);
 clickBtn.addEventListener('click', handleButtonClick);
 resetBtn.addEventListener('click', handleResetClick);
+clearHistoryBtn.addEventListener('click', handleClearHistoryClick);
+darkModeBtn.addEventListener('click', handleDarkModeClick);
 
 // キーボードショートカット（Enterキーでボタンクリック）
 document.addEventListener('keydown', function(event) {
