@@ -15,7 +15,11 @@
 - `script.js` - JavaScript
 - `README.md` - このファイル
 - `CONTRIBUTING.md` - 共同開発ガイド
+- `DEVELOPMENT_GUIDELINES.md` - 詳細な開発ガイドライン
+- `TEAM_SETUP.md` - チーム開発クイックスタート
 - `.github/` - GitHub設定ファイル
+- `.vscode/` - VS Code設定ファイル
+- `.editorconfig` - エディタ設定
 
 ## 使い方
 
@@ -50,10 +54,12 @@
 詳細は [CONTRIBUTING.md](CONTRIBUTING.md) をご覧ください。
 
 ### 開発に参加したい方へ
-- 🐛 バグを見つけた → [Issue を作成](../../issues/new?template=bug_report.md)
-- ✨ 新機能のアイデア → [Feature Request を作成](../../issues/new?template=feature_request.md)
-- 💻 コードを書きたい → [Good First Issues](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) をチェック
+- 🚀 **初めての方** → [チーム開発クイックスタート](TEAM_SETUP.md)
+- 📋 **詳細なルール** → [開発ガイドライン](DEVELOPMENT_GUIDELINES.md)
+- 🐛 **バグを見つけた** → [Issue を作成](../../issues/new?template=bug_report.md)
+- ✨ **新機能のアイデア** → [Feature Request を作成](../../issues/new?template=feature_request.md)
+- 💻 **コードを書きたい** → [Good First Issues](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) をチェック
 
 ---
-作成者: masahide0902  
-コントリビューター: 募集中！ 
+作成者: masahide0902
+コントリビューター: 募集中！
