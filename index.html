@@ -1,77 +1,169 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My First GitHub Project</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <h1>🚀 GitHub学習プロジェクト</h1>
-        </nav>
-    </header>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h2>GitHubへようこそ！</h2>
-                <p>このページは、GitHubの基本操作を学習するためのサンプルプロジェクトです。</p>
-                <div class="button-group">
-                    <button id="clickBtn" class="btn">クリックしてみよう！</button>
-                    <button id="resetBtn" class="btn btn-secondary">リセット</button>
-                    <button id="darkModeBtn" class="btn btn-dark">🌙 ダークモード</button>
-                </div>
-            </div>
-        </section>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="GitHubの基本操作を学習できるインタラクティブなWebサイト。Git、GitHub、プルリクエストを実践的に学習。">
+        <meta name="keywords" content="GitHub, Git, 学習, プログラミング, バージョン管理, 初心者">
+        <meta name="author" content="masahide0902">
+        <meta name="theme-color" content="#667eea">
+        <meta name="color-scheme" content="light dark">
 
-        <section class="features">
-            <div class="container">
-                <h3>学習内容</h3>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>📝 Git基本操作</h4>
-                        <p>add, commit, pushなどの基本コマンドを学習</p>
+        <!-- Open Graph -->
+        <meta property="og:title" content="GitHub学習プロジェクト">
+        <meta property="og:description" content="Git/GitHubを実践的に学べる学習プラットフォーム">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://masahide0902.github.io/my-first-github-project/">
+        <meta property="og:image" content="https://masahide0902.github.io/my-first-github-project/og-image.png">
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="GitHub学習プロジェクト">
+        <meta name="twitter:description" content="Git/GitHubを実践的に学べる学習プラットフォーム">
+
+        <!-- PWA -->
+        <link rel="manifest" href="/manifest.json">
+        <link rel="icon" type="image/x-icon"
+            href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNCIgZmlsbD0iIzY2N2VlYSIvPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI4IiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=">
+        <link rel="apple-touch-icon"
+            href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iMjAiIGZpbGw9IiM2NjdlZWEiLz4KPGNpcmNsZSBjeD0iOTAiIGN5PSI5MCIgcj0iNDAiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==">
+
+        <!-- Preload critical resources -->
+        <link rel="preload" href="style.css" as="style">
+        <link rel="preload" href="script.js" as="script">
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://api.github.com" crossorigin>
+
+        <!-- Critical CSS inline -->
+        <style>
+            /* Critical CSS - Above the fold */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-display: swap;
+                line-height: 1.6;
+                color: #333;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                transform: translateZ(0);
+            }
+
+            header {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                padding: 1rem 0;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            header h1 {
+                color: white;
+                text-align: center;
+                font-size: 2rem;
+                font-weight: 600;
+            }
+
+            .hero {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 4rem 0;
+                color: white;
+                min-height: 50vh;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+        </style>
+
+        <!-- Non-critical CSS -->
+        <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
+        <noscript>
+            <link rel="stylesheet" href="style.css">
+        </noscript>
+
+        <title>GitHub学習プロジェクト - Git/GitHubを実践的に学習</title>
+    </head>
+
+    <body class="preload">
+        <header>
+            <nav>
+                <h1>🚀 GitHub学習プロジェクト</h1>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <h2>GitHubへようこそ！</h2>
+                    <p>このページは、GitHubの基本操作を学習するためのサンプルプロジェクトです。</p>
+                    <div class="button-group">
+                        <button id="clickBtn" class="btn">クリックしてみよう！</button>
+                        <button id="resetBtn" class="btn btn-secondary">リセット</button>
+                        <button id="darkModeBtn" class="btn btn-dark">🌙 ダークモード</button>
                     </div>
-                    <div class="feature-card">
-                        <h4>🌿 ブランチ操作</h4>
-                        <p>ブランチの作成、切り替え、マージを体験</p>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="container">
+                    <h3>学習内容</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>📝 Git基本操作</h4>
+                            <p>add, commit, pushなどの基本コマンドを学習</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🌿 ブランチ操作</h4>
+                            <p>ブランチの作成、切り替え、マージを体験</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 プルリクエスト</h4>
+                            <p>コードレビューとマージの流れを理解</p>
+                        </div>
                     </div>
-                    <div class="feature-card">
-                        <h4>🔄 プルリクエスト</h4>
-                        <p>コードレビューとマージの流れを理解</p>
+                </div>
+            </section>
+
+            <section class="status">
+                <div class="container">
+                    <h3>現在の状況</h3>
+                    <div id="status-display">
+                        <p>ボタンをクリックして、JavaScriptの動作を確認してください！</p>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section class="status">
-            <div class="container">
-                <h3>現在の状況</h3>
-                <div id="status-display">
-                    <p>ボタンをクリックして、JavaScriptの動作を確認してください！</p>
+            <section class="history">
+                <div class="container">
+                    <h3>📊 クリック履歴</h3>
+                    <div id="history-display">
+                        <p>まだクリック履歴がありません。ボタンをクリックして履歴を作成しましょう！</p>
+                    </div>
+                    <button id="clearHistoryBtn" class="btn btn-warning" style="display: none;">履歴をクリア</button>
                 </div>
-            </div>
-        </section>
+            </section>
+        </main>
 
-        <section class="history">
+        <footer>
             <div class="container">
-                <h3>📊 クリック履歴</h3>
-                <div id="history-display">
-                    <p>まだクリック履歴がありません。ボタンをクリックして履歴を作成しましょう！</p>
-                </div>
-                <button id="clearHistoryBtn" class="btn btn-warning" style="display: none;">履歴をクリア</button>
+                <p>&copy; 2024 masahide0902 - GitHub学習プロジェクト</p>
             </div>
-        </section>
-    </main>
+        </footer>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 masahide0902 - GitHub学習プロジェクト</p>
-        </div>
-    </footer>
+        <script src="script.js" defer></script>
+    </body>
 
-    <script src="script.js"></script>
-</body>
-</html> 
+</html>

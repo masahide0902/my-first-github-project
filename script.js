@@ -1,3 +1,74 @@
+// ⚡ Performance Optimization Features
+
+// Service Worker Registration
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+        try {
+            const registration = await navigator.serviceWorker.register('/sw.js');
+            console.log('[SW] Service Worker registered successfully:', registration.scope);
+
+            // Service Worker更新チェック
+            registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        console.log('[SW] New Service Worker available');
+                        // 必要に応じてユーザーに更新を通知
+                    }
+                });
+            });
+        } catch (error) {
+            console.error('[SW] Service Worker registration failed:', error);
+        }
+    });
+}
+
+// 画像遅延読み込み (Lazy Loading)
+const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.classList.add('loaded');
+                imageObserver.unobserve(img);
+            }
+        }
+    });
+}, {
+    rootMargin: '50px 0px',
+    threshold: 0.1
+});
+
+// ページ読み込み完了後に遅延読み込み画像を監視
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+    });
+});
+
+// パフォーマンス監視
+const performanceObserver = new PerformanceObserver((list) => {
+    list.getEntries().forEach((entry) => {
+        if (entry.entryType === 'navigation') {
+            console.log('[Performance] Page Load Time:', entry.loadEventEnd - entry.loadEventStart, 'ms');
+        }
+        if (entry.entryType === 'paint') {
+            console.log(`[Performance] ${entry.name}:`, entry.startTime, 'ms');
+        }
+    });
+});
+
+// パフォーマンス監視開始
+if ('PerformanceObserver' in window) {
+    performanceObserver.observe({ entryTypes: ['navigation', 'paint'] });
+}
+
+// プリロード最適化クラス削除
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.remove('preload');
+});
+
 // DOM要素の取得
 const clickBtn = document.getElementById('clickBtn');
 const resetBtn = document.getElementById('resetBtn');
@@ -40,14 +111,14 @@ function getRandomMessage() {
         '🎯 イシューを作成してタスク管理をしてみましょう！',
         '🌈 GitHubの世界へようこそ！'
     ];
-    
+
     return messages[Math.floor(Math.random() * messages.length)];
 }
 
 // ボタンクリック時の処理
 function handleButtonClick() {
     clickCount++;
-    
+
     // 履歴に追加
     const clickTime = getCurrentDateTime();
     clickHistory.push({
@@ -55,7 +126,7 @@ function handleButtonClick() {
         time: clickTime,
         message: getRandomMessage()
     });
-    
+
     updateDisplay();
     updateHistoryDisplay();
 }
@@ -64,13 +135,13 @@ function handleButtonClick() {
 function handleResetClick() {
     clickCount = 0;
     clickBtn.textContent = 'クリックしてみよう！';
-    
+
     // リセットアニメーション
     resetBtn.style.transform = 'scale(0.95)';
     setTimeout(() => {
         resetBtn.style.transform = 'scale(1)';
     }, 150);
-    
+
     // ステータス表示をリセット
     statusDisplay.style.background = 'linear-gradient(45deg, #f093fb 0%, #f5576c 100%)';
     statusDisplay.innerHTML = `
@@ -87,7 +158,7 @@ function handleResetClick() {
 function handleClearHistoryClick() {
     clickHistory = [];
     updateHistoryDisplay();
-    
+
     // アニメーション
     clearHistoryBtn.style.transform = 'scale(0.95)';
     setTimeout(() => {
@@ -99,16 +170,16 @@ function handleClearHistoryClick() {
 function handleDarkModeClick() {
     isDarkMode = !isDarkMode;
     document.body.classList.toggle('dark-mode', isDarkMode);
-    
+
     // ボタンテキストを更新
     darkModeBtn.textContent = isDarkMode ? '☀️ ライトモード' : '🌙 ダークモード';
-    
+
     // アニメーション
     darkModeBtn.style.transform = 'scale(0.95)';
     setTimeout(() => {
         darkModeBtn.style.transform = 'scale(1)';
     }, 150);
-    
+
     // ローカルストレージに保存
     localStorage.setItem('darkMode', isDarkMode);
 }
@@ -117,11 +188,11 @@ function handleDarkModeClick() {
 function updateDisplay() {
     // ボタンのテキストを更新
     clickBtn.textContent = `クリック回数: ${clickCount}`;
-    
+
     // ステータス表示を更新
     const currentTime = getCurrentDateTime();
     const randomMessage = getRandomMessage();
-    
+
     statusDisplay.innerHTML = `
         <h4>🎊 ボタンがクリックされました！</h4>
         <p><strong>クリック回数:</strong> ${clickCount}回</p>
@@ -131,13 +202,13 @@ function updateDisplay() {
             <small>このページはGitHub学習用のサンプルプロジェクトです</small>
         </div>
     `;
-    
+
     // ボタンにアニメーション効果を追加
     clickBtn.style.transform = 'scale(0.95)';
     setTimeout(() => {
         clickBtn.style.transform = 'scale(1)';
     }, 150);
-    
+
     // 特定のクリック回数で特別なメッセージ
     if (clickCount === 5) {
         statusDisplay.style.background = 'linear-gradient(45deg, #11998e 0%, #38ef7d 100%)';
@@ -152,7 +223,7 @@ function updateDisplay() {
 function initializePage() {
     console.log('🚀 GitHub学習プロジェクトが開始されました！');
     console.log('📅 開始時刻:', getCurrentDateTime());
-    
+
     // ダークモードの設定を復元
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
     if (savedDarkMode) {
@@ -160,7 +231,7 @@ function initializePage() {
         document.body.classList.add('dark-mode');
         darkModeBtn.textContent = '☀️ ライトモード';
     }
-    
+
     // 初期メッセージを設定
     statusDisplay.innerHTML = `
         <h4>👋 GitHub学習プロジェクトへようこそ！</h4>
@@ -177,10 +248,10 @@ function updateHistoryDisplay() {
         clearHistoryBtn.style.display = 'none';
         return;
     }
-    
+
     // 最新10件の履歴を表示
     const recentHistory = clickHistory.slice(-10).reverse();
-    
+
     let historyHTML = '<h4>📊 最新のクリック履歴</h4>';
     recentHistory.forEach((item, index) => {
         historyHTML += `
@@ -190,11 +261,11 @@ function updateHistoryDisplay() {
             </div>
         `;
     });
-    
+
     if (clickHistory.length > 10) {
         historyHTML += `<p style="margin-top: 1rem; opacity: 0.8;"><small>他に${clickHistory.length - 10}件の履歴があります</small></p>`;
     }
-    
+
     historyDisplay.innerHTML = historyHTML;
     clearHistoryBtn.style.display = 'inline-block';
 }
@@ -207,14 +278,14 @@ clearHistoryBtn.addEventListener('click', handleClearHistoryClick);
 darkModeBtn.addEventListener('click', handleDarkModeClick);
 
 // キーボードショートカット（Enterキーでボタンクリック）
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         handleButtonClick();
     }
 });
 
 // ページを離れる前の確認（学習用）
-window.addEventListener('beforeunload', function(event) {
+window.addEventListener('beforeunload', function (event) {
     if (clickCount > 0) {
         const message = `${clickCount}回クリックしました。本当にページを離れますか？`;
         event.returnValue = message;
