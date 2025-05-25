@@ -1,4 +1,6 @@
-/* リセットとベーススタイル */
+/* ⚡ Performance Optimized CSS */
+
+/* Critical CSS - Above the fold content */
 * {
     margin: 0;
     padding: 0;
@@ -7,10 +9,16 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-display: swap;
+    /* フォント最適化 */
     line-height: 1.6;
     color: #333;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
+    /* GPU加速を有効化 */
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
@@ -19,7 +27,7 @@ body {
     padding: 0 20px;
 }
 
-/* ヘッダー */
+/* ヘッダー - Critical */
 header {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -27,6 +35,8 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
+    /* パフォーマンス最適化 */
+    will-change: transform;
 }
 
 header h1 {
@@ -36,31 +46,37 @@ header h1 {
     font-weight: 600;
 }
 
-/* メインコンテンツ */
+/* メインコンテンツ - Critical */
 main {
     padding: 2rem 0;
 }
 
-/* ヒーローセクション */
+/* ヒーローセクション - Critical (Above the fold) */
 .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     padding: 4rem 0;
     color: white;
+    min-height: 50vh;
 }
 
 .hero h2 {
-    font-size: 3rem;
+    font-size: clamp(2rem, 5vw, 3rem);
+    /* レスポンシブフォント */
     margin-bottom: 1rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero p {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
     margin-bottom: 2rem;
     opacity: 0.9;
 }
 
-/* ボタン */
+/* ボタン - Critical */
 .button-group {
     display: flex;
     gap: 1rem;
@@ -69,6 +85,7 @@ main {
 }
 
 .btn {
+    display: inline-block;
     background: linear-gradient(45deg, #ff6b6b, #ee5a24);
     color: white;
     border: none;
@@ -76,8 +93,14 @@ main {
     font-size: 1.1rem;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* 最適化されたトランジション */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-weight: 500;
+    /* パフォーマンス最適化 */
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .btn-secondary {
@@ -93,26 +116,39 @@ main {
 }
 
 .btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) translateZ(0);
+    /* GPU加速 */
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .btn:active {
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
 }
 
-/* 機能セクション */
+/* 遅延読み込み画像用 */
+img[data-src] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+img[data-src].loaded {
+    opacity: 1;
+}
+
+/* 機能セクション - Non-critical (Below the fold) */
 .features {
     background: rgba(255, 255, 255, 0.95);
     margin: 2rem 0;
     padding: 3rem 0;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    /* 遅延レンダリング最適化 */
+    contain: layout style paint;
 }
 
 .features h3 {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
     margin-bottom: 3rem;
     color: #333;
 }
@@ -129,12 +165,16 @@ main {
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
+    /* 最適化 */
     border-left: 4px solid #667eea;
+    /* パフォーマンス最適化 */
+    will-change: transform;
+    contain: layout style paint;
 }
 
 .feature-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px) translateZ(0);
 }
 
 .feature-card h4 {
@@ -154,6 +194,7 @@ main {
     padding: 2rem 0;
     border-radius: 15px;
     margin: 2rem 0;
+    contain: layout style paint;
 }
 
 /* 履歴セクション */
@@ -162,16 +203,19 @@ main {
     padding: 2rem 0;
     border-radius: 15px;
     margin: 2rem 0;
+    contain: layout style paint;
 }
 
-.status h3, .history h3 {
+.status h3,
+.history h3 {
     text-align: center;
     font-size: 2rem;
     margin-bottom: 1rem;
     color: #333;
 }
 
-#status-display, #history-display {
+#status-display,
+#history-display {
     text-align: center;
     padding: 2rem;
     background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
@@ -185,6 +229,9 @@ main {
     background: linear-gradient(45deg, #a29bfe 0%, #6c5ce7 100%);
     max-height: 300px;
     overflow-y: auto;
+    /* スクロール最適化 */
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
 }
 
 .history-item {
@@ -201,37 +248,60 @@ footer {
     color: white;
     text-align: center;
     padding: 2rem 0;
-    margin-top: 2rem;
+    margin-top: 3rem;
 }
 
-/* レスポンシブデザイン */
+footer p {
+    margin-bottom: 0.5rem;
+}
+
+footer a {
+    color: #74b9ff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* レスポンシブデザイン - 最適化 */
 @media (max-width: 768px) {
+    .hero {
+        padding: 2rem 0;
+    }
+
     .hero h2 {
         font-size: 2rem;
     }
-    
+
     .hero p {
         font-size: 1rem;
     }
-    
+
     .feature-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .container {
         padding: 0 15px;
     }
+
+    .btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
 }
 
-/* アニメーション */
+/* アニメーション - 最適化 */
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(30px) translateZ(0);
     }
+
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) translateZ(0);
     }
 }
 
@@ -240,37 +310,65 @@ footer {
 }
 
 .feature-card:nth-child(2) {
-    animation-delay: 0.2s;
+    animation-delay: 0.1s;
 }
 
 .feature-card:nth-child(3) {
-    animation-delay: 0.4s;
+    animation-delay: 0.2s;
 }
 
-/* ダークモード */
+/* ダークモード - 最適化 */
 body.dark-mode {
-    background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
-    color: #ddd;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #ecf0f1;
 }
 
 body.dark-mode .features {
-    background: rgba(45, 52, 54, 0.95);
+    background: rgba(52, 73, 94, 0.95);
 }
 
 body.dark-mode .feature-card {
-    background: #2d3436;
-    color: #ddd;
-    border-left-color: #74b9ff;
+    background: #34495e;
+    color: #ecf0f1;
+    border-left-color: #3498db;
 }
 
-body.dark-mode .status, body.dark-mode .history {
-    background: rgba(45, 52, 54, 0.9);
+body.dark-mode .status,
+body.dark-mode .history {
+    background: rgba(52, 73, 94, 0.9);
 }
 
-body.dark-mode .status h3, body.dark-mode .history h3 {
-    color: #ddd;
+body.dark-mode .status h3,
+body.dark-mode .history h3 {
+    color: #ecf0f1;
 }
 
 body.dark-mode footer {
     background: rgba(0, 0, 0, 0.9);
-} 
+}
+
+/* プリロード最適化 */
+.preload * {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* 印刷最適化 */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    .btn {
+        border: 1px solid #000;
+        background: white !important;
+        color: black !important;
+    }
+
+    header,
+    footer {
+        background: white !important;
+        color: black !important;
+    }
+}
