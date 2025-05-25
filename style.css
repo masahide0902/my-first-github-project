@@ -84,6 +84,14 @@ main {
     background: linear-gradient(45deg, #74b9ff, #0984e3);
 }
 
+.btn-warning {
+    background: linear-gradient(45deg, #fdcb6e, #e17055);
+}
+
+.btn-dark {
+    background: linear-gradient(45deg, #2d3436, #636e72);
+}
+
 .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
@@ -148,14 +156,22 @@ main {
     margin: 2rem 0;
 }
 
-.status h3 {
+/* 履歴セクション */
+.history {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem 0;
+    border-radius: 15px;
+    margin: 2rem 0;
+}
+
+.status h3, .history h3 {
     text-align: center;
     font-size: 2rem;
     margin-bottom: 1rem;
     color: #333;
 }
 
-#status-display {
+#status-display, #history-display {
     text-align: center;
     padding: 2rem;
     background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
@@ -163,6 +179,20 @@ main {
     border-radius: 10px;
     font-size: 1.1rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#history-display {
+    background: linear-gradient(45deg, #a29bfe 0%, #6c5ce7 100%);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.history-item {
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
 }
 
 /* フッター */
@@ -215,4 +245,32 @@ footer {
 
 .feature-card:nth-child(3) {
     animation-delay: 0.4s;
+}
+
+/* ダークモード */
+body.dark-mode {
+    background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+    color: #ddd;
+}
+
+body.dark-mode .features {
+    background: rgba(45, 52, 54, 0.95);
+}
+
+body.dark-mode .feature-card {
+    background: #2d3436;
+    color: #ddd;
+    border-left-color: #74b9ff;
+}
+
+body.dark-mode .status, body.dark-mode .history {
+    background: rgba(45, 52, 54, 0.9);
+}
+
+body.dark-mode .status h3, body.dark-mode .history h3 {
+    color: #ddd;
+}
+
+body.dark-mode footer {
+    background: rgba(0, 0, 0, 0.9);
 } 
